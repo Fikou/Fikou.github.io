@@ -25,6 +25,10 @@ function handleMouseButtonChange(event) {
 
 function startGame() {
   if (!soundFile || isNaN(probability) || !selectedMouseButton) {
+    console.log('Debug: Sound File:', soundFile);
+    console.log('Debug: Probability:', probability);
+    console.log('Debug: Selected Mouse Button:', selectedMouseButton);
+
     alert('Please select a sound file, probability, and mouse button.');
     return;
   }
@@ -39,11 +43,9 @@ function startGame() {
   clearInterval(gameInterval);
   highScores = [];
 
-  // Start the game loop
+  // Start the game loop and store the interval ID
   gameInterval = setInterval(playSound, 1000 / probability);
   gameStartTime = new Date().getTime();
-  displayReactionTime(0);
-  displayHighScores()
 }
 
   document.addEventListener('contextmenu', function (event) {
