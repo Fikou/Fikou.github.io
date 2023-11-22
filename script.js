@@ -42,6 +42,7 @@ function startGame() {
   // Start the game loop
   gameInterval = setInterval(playSound, 1000 / probability);
   gameStartTime = new Date().getTime();
+  displayReactionTime(0);
   displayHighScores()
 }
 
