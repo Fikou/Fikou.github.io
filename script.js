@@ -24,8 +24,8 @@ function handleMouseButtonChange(event) {
 }
 
 function startGame() {
-  if (!soundFile || isNaN(probability) || !selectedMouseButton) {
-    alert('Please select a sound file, probability, and mouse button.');
+  if (!soundFile || isNaN(probability)) {
+    alert('Please select a sound file and probability.');
     return;
   }
 
