@@ -82,13 +82,13 @@ function startGame() {
     audioVolume = parseFloat(event.target.value)/100;
   }
 
-  let userClickedInTime = false; // Variable to track whether the user clicked in time
+  let userClickedInTime = true; // Initialize to true to handle the first sound
 
   function playSound() {
-    const randomNumber = Math.random();
-  
     // Reset the variable for each new sound
     userClickedInTime = false;
+  
+    const randomNumber = Math.random();
   
     // Play the sound based on probability
     if (randomNumber <= probability) {
@@ -126,13 +126,18 @@ function startGame() {
   
   function displayReactionTime(reactionTime) {
     const reactionTimeDisplay = document.getElementById('reactionTimeDisplay');
-    reactionTimeDisplay.textContent = `Your Reaction Time: ${reactionTime} milliseconds`;
+  
+    if (reactionTime === 'FAILED') {
+      reactionTimeDisplay.textContent = 'Your Reaction Time: FAILED';
+    } else {
+      reactionTimeDisplay.textContent = `Your Reaction Time: ${reactionTime} milliseconds`;
+    }
   
     // Update the variable to track whether the user clicked in time
     userClickedInTime = reactionTime !== 'FAILED';
   
     // If the user clicked in time, update the high scores
-    if (userClickedInTime) {
+    if (userClickedInTime && reactionTime !== 'FAILED') {
       highScores.push(reactionTime);
       highScores.sort((a, b) => a - b);
       highScores = highScores.slice(0, 10); // Keep only the top 10 scores
