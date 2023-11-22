@@ -46,29 +46,6 @@ function startGame() {
   displayHighScores()
 }
 
-function displayHighScores() {
-    // Fetch high scores from the server
-    fetch('/high-scores')
-      .then(response => response.json())
-      .then(data => {
-        // Update the high scores
-        highScores = data;
-        
-        // Sort high scores in ascending order
-        highScores.sort((a, b) => a - b);
-  
-        // Display the top 10 high scores
-        const highScoreList = document.getElementById('highScoreList');
-        highScoreList.innerHTML = '<h3>High Scores</h3>';
-        for (let i = 0; i < Math.min(10, highScores.length); i++) {
-          const listItem = document.createElement('li');
-          listItem.textContent = `${i + 1}. ${highScores[i]} milliseconds`;
-          highScoreList.appendChild(listItem);
-        }
-      })
-      .catch(error => console.error('Error fetching high scores:', error));
-  }
-
   document.addEventListener('contextmenu', function (event) {
     if (selectedMouseButton === 'right') {
       event.preventDefault();
@@ -168,3 +145,16 @@ function displayHighScores() {
     }
   }
   
+  function displayHighScores() {
+    // Sort high scores in ascending order
+    highScores.sort((a, b) => a - b);
+  
+    // Display the top 5 high scores
+    const highScoreList = document.getElementById('highScoreList');
+    highScoreList.innerHTML = '<h3>High Scores</h3>';
+    for (let i = 0; i < Math.min(10, highScores.length); i++) {
+      const listItem = document.createElement('li');
+      listItem.textContent = `${i + 1}. ${highScores[i]} milliseconds`;
+      highScoreList.appendChild(listItem);
+    }
+  }
