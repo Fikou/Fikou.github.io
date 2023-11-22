@@ -46,6 +46,8 @@ function startGame() {
   // Start the game loop and store the interval ID
   gameInterval = setInterval(playSound, 1000 / probability);
   gameStartTime = new Date().getTime();
+  displayReactionTime(0);
+  displayHighScores()
 }
 
   document.addEventListener('contextmenu', function (event) {
@@ -59,9 +61,6 @@ function startGame() {
   function stopGame() {
     // Clear the game loop interval
     clearInterval(gameInterval);
-  
-    // Save the final high scores locally
-    saveLocalHighScores();
   
     // Reset high scores and current reaction time
     highScores = [];
@@ -85,72 +84,76 @@ function startGame() {
   }
 
   let userClickedInTime = true; // Initialize to true to handle the first sound
+let reactionTimeout; // Variable to store the reaction timeout
 
-  function playSound() {
-    // Reset the variable for each new sound
-    userClickedInTime = false;
-  
-    const randomNumber = Math.random();
-  
-    // Play the sound based on probability
-    if (randomNumber <= probability) {
-      const audio = new Audio(URL.createObjectURL(soundFile));
-  
-      // Set the volume
-      audio.volume = audioVolume;
-  
-      // Set the start time when the sound is played
-      const soundStartTime = new Date().getTime();
-  
-      audio.play();
-  
-      // Record the time when the user clicks
-      const recordReactionTime = () => {
-        // Check if the user clicked in time
-        if (!userClickedInTime) {
-          // Display "FAILED" if the user didn't click in time
-          displayReactionTime('FAILED');
-        }
-      };
-  
-      // Add a click event listener for the selected mouse button
-      document.addEventListener(selectedMouseButton === 'left' ? 'click' : 'contextmenu', recordReactionTime, { once: true });
-    }
-  
+function playSound() {
+  // Reset the variable for each new sound
+  userClickedInTime = false;
+
+  const randomNumber = Math.random();
+
+  // Play the sound based on probability
+  if (randomNumber <= probability) {
+    const audio = new Audio(URL.createObjectURL(soundFile));
+
+    // Set the volume
+    audio.volume = audioVolume;
+
+    // Set the start time when the sound is played
+    const soundStartTime = new Date().getTime();
+
+    audio.play();
+
+    // Record the time when the user clicks
+    const recordReactionTime = () => {
+      // Check if the user clicked in time
+      if (!userClickedInTime) {
+        // Display "FAILED" if the user didn't click in time
+        displayReactionTime('FAILED');
+      }
+    };
+
+    // Add a click event listener for the selected mouse button
+    document.addEventListener(selectedMouseButton === 'left' ? 'click' : 'contextmenu', recordReactionTime, { once: true });
+
     // Set a timeout to handle the case where the user didn't click in time
-    setTimeout(() => {
+    reactionTimeout = setTimeout(() => {
       if (!userClickedInTime) {
         // Display "FAILED" if the user didn't click in time
         displayReactionTime('FAILED');
       }
     }, 1000 / probability);
   }
-  
-  function displayReactionTime(reactionTime) {
-    const reactionTimeDisplay = document.getElementById('reactionTimeDisplay');
-  
-    if (reactionTime === 'FAILED') {
-      reactionTimeDisplay.textContent = 'Your Reaction Time: FAILED';
-    } else {
-      reactionTimeDisplay.textContent = `Your Reaction Time: ${reactionTime} milliseconds`;
-    }
-  
-    // Update the variable to track whether the user clicked in time
-    userClickedInTime = reactionTime !== 'FAILED';
-  
-    // If the user clicked in time, update the high scores
-    if (userClickedInTime && reactionTime !== 'FAILED') {
-      highScores.push(reactionTime);
-      highScores.sort((a, b) => a - b);
-      highScores = highScores.slice(0, 10); // Keep only the top 10 scores
-  
-      // Save the updated high scores locally
-      saveLocalHighScores();
-  
-      // Update the high scores display
-      displayHighScores();
-    }
+}
+
+function displayReactionTime(reactionTime) {
+  const reactionTimeDisplay = document.getElementById('reactionTimeDisplay');
+
+  if (reactionTime === 'FAILED') {
+    reactionTimeDisplay.textContent = 'Your Reaction Time: FAILED';
+  } else {
+    reactionTimeDisplay.textContent = `Your Reaction Time: ${reactionTime} milliseconds`;
   }
+
+  // Update the variable to track whether the user clicked in time
+  userClickedInTime = reactionTime !== 'FAILED';
+
+  // If the user clicked in time, update the high scores
+  if (userClickedInTime && reactionTime !== 'FAILED') {
+    highScores.push(reactionTime);
+    highScores.sort((a, b) => a - b);
+    highScores = highScores.slice(0, 5); // Keep only the top 5 scores
+
+    // Save the updated high scores locally
+    saveLocalHighScores();
+
+    // Update the high scores display
+    displayHighScores();
+  }
+
+  // Clear the reaction timeout
+  clearTimeout(reactionTimeout);
+}
   
   function displayHighScores() {
     // Sort high scores in ascending order
