@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Sound Reaction Game</title>
+</head>
+<body>
+  <div id="settings" class="container">
+    <h1>Sound Reaction Game</h1>
+
+    <label for="fileInput">Select Sound File:</label>
+    <input type="file" id="fileInput" accept=".mp3, .wav">
+
+    <label for="volumeInput">Set Volume (0 to 100):</label>
+    <input type="range" id="volumeInput" min="0" max="100" step="1" value="50">
+
+    <label for="probabilityInput">Set Probability (0 to 1):</label>
+    <input type="number" id="probabilityInput" step="0.001" min="0" max="1" value="0.5">
+
+    <label for="mouseButtonSelect">Select Mouse Button:</label>
+    <select id="mouseButtonSelect">
+      <option value="left">Left Click</option>
+      <option value="right">Right Click</option>
+    </select>
+
+    <button id="startButton">Start Game</button>
+
+  </div>
+  <div class="container" id="gameArea" style="display: none;">
+    <p id="reactionTimeDisplay"></p>
+    <ul id="highScoreList"></ul>
+    <button id="stopButton">Stop</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
