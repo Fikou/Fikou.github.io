@@ -1,1 +1,0 @@
-This is a simple application <b>written with Chat-GPT</b> that measures your reaction time to a selected sound. You can modify the sound file, volume, probability of it being played etc. Try playing around with it!
