@@ -5,14 +5,25 @@ let gameInterval;
 let gameStartTime;
 let highScores = [];
 
-document.getElementById('fileInput').addEventListener('change', handleFileSelect);
 document.getElementById('probabilityInput').addEventListener('input', handleProbabilityChange);
 document.getElementById('mouseButtonSelect').addEventListener('change', handleMouseButtonChange);
 document.getElementById('startButton').addEventListener('click', startGame);
 
-function handleFileSelect(event) {
-  const fileInput = event.target;
-  soundFile = fileInput.files[0];
+document.getElementById('soundFileSelect').addEventListener('change', handleSoundFileChange);
+document.getElementById('soundFileInput').addEventListener('change', handleSoundFileUpload);
+
+function handleSoundFileChange(event) {
+  const selectedFile = event.target.value;
+  if (selectedFile) {
+    soundFile = selectedFile;
+  }
+}
+
+function handleSoundFileUpload(event) {
+  const uploadedFile = event.target.files[0];
+  if (uploadedFile) {
+    soundFile = uploadedFile;
+  }
 }
 
 function handleProbabilityChange(event) {
@@ -100,7 +111,7 @@ function displayHighScores() {
   
     // Play the sound based on probability
     if (randomNumber <= probability) {
-      const audio = new Audio(URL.createObjectURL(soundFile));
+      const audio = new Audio(soundFile instanceof File ? URL.createObjectURL(soundFile) : soundFile);
   
       // Set the volume
       audio.volume = audioVolume;
